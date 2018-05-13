@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>Products</title>
+    <th:block th:include="layout/header"></th:block>
+</head>
+<body>
+<div class="container">
+    <div th:if="${not #lists.isEmpty(sortedlist)}">
+        <table class="table table-striped">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Duration</th>
+                <th>Time</th>
+            </tr>
+            <tr th:each="sortedlist : ${sortedlist}">
+                <td th:text="${sortedlist.id}">Id</td>
+                <td th:text="${sortedlist.name}">Name</td>
+                <td th:text="${sortedlist.duration}">Duration</td>
+                <td th:text="${sortedlist.time}">Time</td>                       
+               <!--  <td><a th:href="${'/sortedlist/edit/' + sortedlist.id}" class="btn btn-default">Edit</a></td>
+                <td><a th:href="${'/sortedlist/delete/' + sortedlist.id}" class="btn btn-danger">Delete</a></td> -->
+            </tr>
+        </table>
+    </div>
+    <div th:if="${not #lists.isEmpty(network)}">
+        <h2>Sorted List</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Duration</th>
+                <th>Time</th>
+            </tr>
+            <tr th:each="network : ${network}">
+                <td th:text="${network.id}">Id</td>
+                <td th:text="${network.name}">Name</td>
+                <td th:text="${network.duration}">Duration</td>
+                <td th:text="${network.time}">Time</td>                       
+               <!--  <td><a th:href="${'/sortedlist/edit/' + sortedlist.id}" class="btn btn-default">Edit</a></td>
+                <td><a th:href="${'/sortedlist/delete/' + sortedlist.id}" class="btn btn-danger">Delete</a></td> -->
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
