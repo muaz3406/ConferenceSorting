@@ -2,6 +2,7 @@ package com.muaz.conferencesorting.services;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,9 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
 import com.muaz.conferencesorting.entity.Presentation;
+import com.muaz.conferencesorting.entity.SortedPresentation;
 import com.muaz.conferencesorting.repository.PresentationRepository;
+import com.muaz.conferencesorting.repository.SortedPresentationRepository;
 
 @Service("presentationService")
 public class PresentationServiceImpl implements PresentationService{
@@ -27,45 +29,60 @@ public class PresentationServiceImpl implements PresentationService{
 	@Qualifier("presentationSetTimes")
 	private PresentationSetTimesService presentationSetTimesService;
 	
-	private ArrayList<Presentation> prelist = new ArrayList<Presentation>();
+	@Autowired
+	@Qualifier("sortedPresentationRepository")
+	private SortedPresentationRepository sortedPresentationRepository;
+	
 	
 	@Override
 	public void sortedPresentations(){
-		try {
-			  prelist=(ArrayList<Presentation>) presentationRepository.findAll();
-
-			
-		}catch(Exception b){
-			log.error("**************Find All Error*****************", b);
-
-			
-		}
+			ArrayList<Presentation> prelist=(ArrayList<Presentation>) presentationRepository.findAll();
 		
+			try {
+				  prelist=(ArrayList<Presentation>) presentationRepository.findAll();
 
-		try {
-			
-			presentatitonSortTimes(presentationSetTimesService.PresentatitonSetTimes(presentatitonSortDurations(prelist)));
-			
-//			presentationRepository.save(presentatitonSortTimes(presentationSetTimesService.PresentatitonSetTimes(presentatitonSortDurations(prelist))));
-			  
-		}catch(Exception e){
-			log.error("**************Sort times Error*****************", e);
-	
-		}
-		
-		
-try {
-			for(Presentation pre:prelist){
-				presentationRepository.save(pre);
+				
+			}catch(Exception b){
+				log.error("**************Find All Error*****************", b);
+
 				
 			}
 			
-			  
-		}catch(Exception e){
-			log.error("**************Save Error*****************", e);
-	
-		}
+
+			try {
+				
+				presentatitonSortTimes(presentationSetTimesService.PresentatitonSetTimes(presentatitonSortDurations(prelist)));
+				
+//				presentationRepository.save(presentatitonSortTimes(presentationSetTimesService.PresentatitonSetTimes(presentatitonSortDurations(prelist))));
+				  
+			}catch(Exception e){
+				log.error("**************Sort times Error*****************", e);
 		
+			}
+			
+			
+	try {
+				for(Presentation pre:prelist){
+					presentationRepository.save(pre);
+					
+				}
+				
+				  
+			}catch(Exception e){
+				log.error("**************Save Error*****************", e);
+		
+			}
+
+			for(int i=0;i<prelist.size();i++){
+				SortedPresentation sortedpresentation=new SortedPresentation();
+				sortedpresentation.setName(prelist.get(i).getName());
+				sortedpresentation.setDuration(prelist.get(i).getDuration());
+				sortedpresentation.setTime(prelist.get(i).getTime());
+				sortedPresentationRepository.save(sortedpresentation);
+			}
+			//	presentationRepository.saveAll(presentatitonSortTimes(presentationSetTimesService.PresentatitonSetTimes(presentatitonSortDurations(prelist))));
+			  
+			
 	
 	}
 	
@@ -127,10 +144,6 @@ try {
 	}
 	
 	
-	public void savePreList(Presentation presentation){
-		presentationRepository.save(presentation);
-		
-	}
-
+	
 	
 }
