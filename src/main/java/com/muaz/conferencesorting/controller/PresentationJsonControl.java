@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.muaz.conferencesorting.entity.Network;
 import com.muaz.conferencesorting.entity.Presentation;
+import com.muaz.conferencesorting.entity.SortedPresentation;
 import com.muaz.conferencesorting.repository.NetworkRepository;
 import com.muaz.conferencesorting.repository.PresentationRepository;
+import com.muaz.conferencesorting.repository.SortedPresentationRepository;
 import com.muaz.conferencesorting.services.PresentationService;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +37,13 @@ public class PresentationJsonControl {
   @Qualifier("networkRepository")
   private NetworkRepository networkRepository;
   
+  @Autowired
+  @Qualifier("sortedPresentationRepository")
+  private SortedPresentationRepository sortedPresentationRepository;
+  
+  
+  
+  
   
   
   @RequestMapping("/add/{name}/{duration}")
@@ -55,10 +64,17 @@ public class PresentationJsonControl {
 	  
   }
   
-  @RequestMapping("/all")
-  public Iterable<Presentation> findAll() {
+  @RequestMapping("/pretable")
+  public Iterable<Presentation> findAllPreTable() {
       return presentationRepository.findAll();
   }
+  
+  
+  @RequestMapping("/sortedtable")
+  public Iterable<SortedPresentation> findAllSortedTable(){
+	  return sortedPresentationRepository.findAll();
+  }
+  
   
   @RequestMapping("/network")
   public Network addNetwork() {
